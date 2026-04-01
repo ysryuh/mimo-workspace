@@ -667,63 +667,103 @@ add_text(slide, Inches(1.3), Inches(6.9), Inches(11), Inches(0.3),
 
 
 # ═══════════════════════════════════════════════════════
-# SLIDE 13: 개발 로드맵
+# SLIDE 13: 선행 확보 + 로드맵 개요
 # ═══════════════════════════════════════════════════════
 slide = prs.slides.add_slide(prs.slide_layouts[6])
 add_bg(slide)
 add_text(slide, Inches(0.8), Inches(0.4), Inches(5), Inches(0.5),
          "09  개발 로드맵", font_size=14, color=ACCENT_BLUE, bold=True)
 add_text(slide, Inches(0.8), Inches(0.8), Inches(10), Inches(0.6),
-         "4단계 24개월 개발 계획", font_size=30, color=WHITE, bold=True)
+         "6개월 프로토타입 개발 계획", font_size=30, color=WHITE, bold=True)
 add_divider(slide, Inches(0.8), Inches(1.5), Inches(2))
 
-phases = [
-    ("Phase 1", "기초 설계", "0~6개월", [
-        "상세 기계/전기 설계",
-        "SW 아키텍처 확정",
-        "핵심 부품 선정",
-        "시뮬레이터 구축",
-    ], ACCENT_BLUE),
-    ("Phase 2", "프로토타입", "6~12개월", [
-        "AMR 플랫폼 제작",
-        "양팔 통합 & 캘리브레이션",
-        "자율주행 구현",
-        "안전 시스템 1차 검증",
-    ], ACCENT_ORANGE),
-    ("Phase 3", "시험·검증", "12~18개월", [
-        "통합 테스트",
-        "안전 인증 (ISO 3691-4)",
-        "현장 파일럿 테스트",
-        "성능 최적화",
-    ], GREEN),
-    ("Phase 4", "양산 준비", "18~24개월", [
-        "양산 설계 (DFM)",
-        "공급망 구축",
-        "마케팅 & 영업",
-        "첫 고객 인도",
-    ], YELLOW),
+# Accelerators
+add_text(slide, Inches(0.8), Inches(1.7), Inches(5), Inches(0.4),
+         "✅ 선행 확보 사항 (기존 24개월 → 6개월 압축)", font_size=16, color=GREEN, bold=True)
+
+accelerators = [
+    ("자체 제어 시스템", "SW 개발 기간 대폭 단축"),
+    ("자율주행 플랫폼", "Navigation Stack 재활용"),
+    ("선행 모델 개발 경험", "기계/전기 설계 검증 완료"),
+    ("AMR 기본 구동 시스템", "프레임/구동 재설계 최소화"),
 ]
 
-for i, (phase, title, period, items, color) in enumerate(phases):
-    x = Inches(0.8) + i * Inches(3.1)
-    add_shape(slide, x, Inches(1.8), Inches(2.8), Inches(5), fill_color=CARD_BG)
-    add_shape(slide, x, Inches(1.8), Inches(2.8), Pt(5), fill_color=color)
-    add_text(slide, x + Inches(0.2), Inches(2.0), Inches(2.4), Inches(0.3),
-             phase, font_size=12, color=color, bold=True)
-    add_text(slide, x + Inches(0.2), Inches(2.3), Inches(2.4), Inches(0.3),
-             title, font_size=18, color=WHITE, bold=True)
-    add_text(slide, x + Inches(0.2), Inches(2.7), Inches(2.4), Inches(0.3),
-             period, font_size=12, color=MID_GRAY)
-    add_divider(slide, x + Inches(0.2), Inches(3.1), Inches(2.4))
-    for j, item in enumerate(items):
-        add_text(slide, x + Inches(0.25), Inches(3.3) + j * Inches(0.4), Inches(2.3), Inches(0.35),
-                 f"▸ {item}", font_size=12, color=LIGHT_GRAY)
+for i, (title, desc) in enumerate(accelerators):
+    col = i % 2
+    row = i // 2
+    x = Inches(0.8) + col * Inches(6)
+    y = Inches(2.2) + row * Inches(0.7)
+    add_shape(slide, x, y, Inches(5.7), Inches(0.6), fill_color=CARD_BG)
+    add_text(slide, x + Inches(0.2), y + Inches(0.05), Inches(2.5), Inches(0.25),
+             f"✅ {title}", font_size=13, color=GREEN, bold=True)
+    add_text(slide, x + Inches(0.2), y + Inches(0.3), Inches(5.2), Inches(0.25),
+             desc, font_size=12, color=LIGHT_GRAY)
 
-# Milestones bar
-add_shape(slide, Inches(0.8), Inches(7.0), Inches(11.5), Inches(0.3), fill_color=CARD_BG)
+# Timeline - 6 months
+add_text(slide, Inches(0.8), Inches(3.8), Inches(5), Inches(0.4),
+         "📅 6개월 타임라인", font_size=16, color=ACCENT_ORANGE, bold=True)
+
+phases_compact = [
+    ("P1", "설계+소싱", "W1~4", "1개월", ACCENT_BLUE),
+    ("P2", "HW통합", "W2~8", "2개월", ACCENT_ORANGE),
+    ("P3", "SW통합", "W4~16", "4개월", GREEN),
+    ("P4", "테스트", "W12~22", "5.5개월", YELLOW),
+    ("P5", "데모", "W20~26", "6개월", RED),
+]
+
+# Timeline bars
+bar_y = Inches(4.3)
+bar_total_width = Inches(11)
+total_weeks = 26
+
+for phase, name, period, duration, color in phases_compact:
+    # Parse week range
+    if "~" in period:
+        parts = period.replace("W", "").split("~")
+        start_w = int(parts[0])
+        end_w = int(parts[1])
+    else:
+        start_w = int(period.replace("W", ""))
+        end_w = start_w
+    
+    bar_left = Inches(1.5) + (start_w / total_weeks) * bar_total_width
+    bar_width = ((end_w - start_w) / total_weeks) * bar_total_width
+    if bar_width < Inches(0.5):
+        bar_width = Inches(0.5)
+    
+    add_shape(slide, bar_left, bar_y, bar_width, Inches(0.35), fill_color=color)
+    add_text(slide, bar_left + Inches(0.05), bar_y + Inches(0.02), bar_width - Inches(0.1), Inches(0.3),
+             f"{phase}", font_size=10, color=WHITE, bold=True, alignment=PP_ALIGN.CENTER)
+
+# Week labels
+add_text(slide, Inches(1.5), Inches(4.7), Inches(11), Inches(0.25),
+         "W1          W4          W8          W12         W16         W20         W26",
+         font_size=10, color=MID_GRAY, font_name="Consolas")
+
+# Phase details
+add_text(slide, Inches(0.8), Inches(5.1), Inches(5), Inches(0.3),
+         "📋 단계별 주요 작업", font_size=14, color=ACCENT_BLUE, bold=True)
+
+phase_details = [
+    ("P1 설계+소싱", "양팔 마운트 설계, 섀시 보강, 부품 발주", ACCENT_BLUE),
+    ("P2 HW통합", "AMR 보강, 양팔 마운트, 센서/BMS 장착", ACCENT_ORANGE),
+    ("P3 SW통합", "양팔 드라이버, MoveIt 2, 협동작업, Fleet 연동", GREEN),
+    ("P4 테스트", "성능/안전/통합/하중 검증, 파일럿", YELLOW),
+    ("P5 데모", "데모 제작, 인증 준비, 고객 피드백", RED),
+]
+
+for i, (title, desc, color) in enumerate(phase_details):
+    y = Inches(5.5) + i * Inches(0.38)
+    add_text(slide, Inches(1), y, Inches(2.5), Inches(0.3),
+             title, font_size=12, color=color, bold=True)
+    add_text(slide, Inches(3.8), y, Inches(8.5), Inches(0.3),
+             desc, font_size=12, color=LIGHT_GRAY)
+
+# Key assumption
+add_shape(slide, Inches(0.8), Inches(7.0), Inches(11.5), Inches(0.3), fill_color=ACCENT_BLUE)
 add_text(slide, Inches(1), Inches(7.0), Inches(11), Inches(0.3),
-         "M1: 설계확정(6M)  →  M2: 프로토타입(12M)  →  M3: 안전인증(15M)  →  M4: 파일럿완료(18M)  →  M5: 양산개시(24M)",
-         font_size=12, color=MID_GRAY)
+         "핵심: 양팔 COTS(기성품) 선택 → 납기 4~6주  |  SW는 기존 플랫폼 재활용  |  HW/SW 병렬 진행",
+         font_size=12, color=WHITE, bold=True)
 
 
 # ═══════════════════════════════════════════════════════
@@ -792,7 +832,7 @@ add_text(slide, Inches(1.5), Inches(4.2), Inches(10), Inches(0.5),
          "시장에 없는 제품을 만드는 것. 그것이 우리의 목표다.", font_size=18, color=LIGHT_GRAY)
 
 add_text(slide, Inches(1.5), Inches(5.5), Inches(10), Inches(0.4),
-         "v0.1 Draft  |  2026-04-01  |  다음 단계: 상세 기계 설계 (CAD)",
+         "v0.2 Draft  |  2026-04-01  |  6개월 프로토타입 개발 목표",
          font_size=14, color=MID_GRAY)
 
 
