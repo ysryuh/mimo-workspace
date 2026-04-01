@@ -290,8 +290,8 @@ UC-3: 팔레트 스태킹
 
 | 항목 | 사양 |
 |------|------|
-| 구동 방식 | Mecanum 휠 (4륜 독립구동) 또는 Differential + Caster |
-| 모터 | BLDC 서보모터 × 4, 각 500W+ |
+| 구동 방식 4륜 독립 스웨이브 드라이브 (Steering Drive) |
+| 모터 | BLDC 서보모터 × 4, 각 1kW |
 | 감속기 | 하모닉 드라이브 또는 RV 감속기 |
 | 최대 추력 | 총 3kN+ (600kg + 자중 가속 고려) |
 | 최대 속도 | 2.0 m/s (공차), 1.5 m/s (600kg 하중) |
@@ -684,7 +684,7 @@ Critical Path:
 
 | 카테고리 | 부품 | 예상 수량 | 참고 |
 |----------|------|----------|------|
-| 구동 모터 | BLDC 서보 500W+ | 4 | T-Motor, Maxon, 국내 |
+| 구동 모터 | BLDC 서보 1kW | 4 | T-Motor, Maxon, 국내 |
 | 감속기 | 하모닉 드라이브 | 4+12 (팔) | HD Systems, Leaderdrive |
 | 팔 관절 모터 | BLDC 서보 200W+ | 12 | 관절별 상이 |
 | LiDAR | 3D (Velodyne/Ouster) | 1 | 또는 Livox |
