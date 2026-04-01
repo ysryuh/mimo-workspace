@@ -2,7 +2,7 @@
 # High-Load Autonomous Mobile Manipulator Robot — Integrated Design Document
 
 **프로젝트**: 고하중 양팔 모바일 매니퓰레이터 (AMMR) 개발  
-**버전**: v0.1 (초안)  
+**버전**: v0.2 (초안)  
 **작성일**: 2026-04-01  
 **작성자**: 제임스 (James) + 미모 (Mimo)  
 **상태**: Draft
